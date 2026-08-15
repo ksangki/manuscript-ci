@@ -1,5 +1,7 @@
 # Manuscript CI 사용 가이드
 
+[README 한국어](README_KO.md) | [README English](README.md) | [스킬 한국어](SKILL_KO.md) | [기여 가이드 한국어](CONTRIBUTING_KO.md)
+
 Manuscript CI는 **AI가 책을 대신 써주는 도구가 아니다.** 이미 쓴 원고를 읽고, 문제가 분명한 부분만 작게 고친 뒤, 그 수정이 원문보다 실제로 나은지 다시 검증하는 교정 도구다.
 
 핵심 원칙은 하나다.
@@ -21,7 +23,7 @@ Manuscript CI는 **AI가 책을 대신 써주는 도구가 아니다.** 이미 �
 
 ## 2. 가장 쉬운 사용법: AI 에이전트 스킬
 
-Codex, Claude Code, Gemini CLI처럼 책 저장소를 직접 읽을 수 있는 AI 에이전트를 쓰고 있다면 CLI 설치보다 `SKILL.md`부터 써보는 것을 권장한다.
+Codex, Claude Code, Gemini CLI처럼 책 저장소를 직접 읽을 수 있는 AI 에이전트를 쓰고 있다면 CLI 설치보다 `SKILL.md`부터 써보는 것을 권장한다. 사람이 읽기 쉬운 한국어 설명은 [`SKILL_KO.md`](SKILL_KO.md)에 있다.
 
 책 저장소에서 에이전트에게 다음처럼 요청한다.
 
@@ -268,3 +270,9 @@ CI에서는 자동 수정하지 말고 **문제 발견만** 하도록 권장한�
 이 드러난다.
 
 다만 **과거 책을 현재의 문체로 전부 덮어쓰면 안 된다.** 그 책이 쓰인 시기의 목소리도 저자의 기록이다. `WRITING_BRIEF.md`를 책마다 따로 두는 것을 권장한다.
+
+## 관련 문서
+
+- [`README_KO.md`](README_KO.md) — 프로젝트 소개와 빠른 시작
+- [`SKILL_KO.md`](SKILL_KO.md) — AI 에이전트용 리뷰 원칙의 한국어 설명
+- [`CONTRIBUTING_KO.md`](CONTRIBUTING_KO.md) — 개발·기여 가이드
