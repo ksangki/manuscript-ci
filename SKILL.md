@@ -5,6 +5,8 @@ description: Review long-form book manuscripts conservatively. Preserve author v
 
 # Manuscript CI Review Skill
 
+**English** | [한국어](SKILL_KO.md)
+
 Use this skill when the user asks to review, proofread, improve, edit, or quality-check a book manuscript or multiple chapters and wants the author's voice preserved.
 
 ## Core principle
