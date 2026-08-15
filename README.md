@@ -1,5 +1,7 @@
 # Manuscript CI
 
+**English** | [한국어](README_KO.md)
+
 **AI review that protects the author's voice.**
 
 Manuscript CI is an open-source review workflow for long-form writing. It does not try to rewrite a book into generic “AI-clean” prose. Instead it proposes small editorial changes, evaluates them against the author's rules, compares each candidate against the original in both orders, and keeps only verified improvements.
@@ -48,6 +50,8 @@ Requires Python 3.11+.
 ### Option A — use it as an AI agent skill
 
 This is the fastest path if you already use Codex, Claude Code, Gemini CLI, or another coding agent with access to your manuscript repository. Copy `SKILL.md` into your agent skill setup, or simply ask the agent to follow the file in this repository. Then add the three project rules below to your book repo and request a Manuscript CI review.
+
+A Korean explanation of the skill is available in [SKILL_KO.md](SKILL_KO.md).
 
 ### Option B — install the CLI
 
@@ -179,6 +183,10 @@ The workflow was generalized from a full-book review where a long-form manuscrip
 ## Acknowledgement
 
 Manuscript CI was inspired by the mutate → evaluate → pairwise keep/revert loop in [`crimeacs/auto-improve`](https://github.com/crimeacs/auto-improve), which is MIT licensed. Manuscript CI is an independent implementation focused on long-form manuscripts and does not vendor the upstream source.
+
+## Contributing
+
+See [CONTRIBUTING.md](CONTRIBUTING.md) or the [Korean contributing guide](CONTRIBUTING_KO.md).
 
 ## License
 
