@@ -1,5 +1,7 @@
 # Contributing
 
+**English** | [한국어](CONTRIBUTING_KO.md)
+
 Manuscript CI should stay conservative. A feature is useful only if it helps authors find real defects without turning their work into generic model-written prose.
 
 ## Principles
