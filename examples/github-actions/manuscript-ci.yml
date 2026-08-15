@@ -1,0 +1,27 @@
+name: Manuscript CI
+
+on:
+  pull_request:
+    paths:
+      - "chapters/**.md"
+      - "WRITING_BRIEF.md"
+      - "DEDUP_DECISIONS.md"
+      - "REVIEW_RUBRIC.md"
+
+jobs:
+  static-manuscript-check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install Manuscript CI
+        run: pip install -e .
+      - name: Static checks
+        run: manuscript-ci check chapters/*.md
+
+# Recommended: keep LLM review report-only in CI.
+# Add your own mutator/evaluator wrappers and secrets, then run:
+#   manuscript-ci audit-book chapters/*.md
+# Do not use --apply in CI unless you deliberately want a bot-authored commit.

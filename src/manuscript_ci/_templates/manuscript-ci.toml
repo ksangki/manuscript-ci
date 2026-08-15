@@ -1,0 +1,18 @@
+[review]
+max_iterations = 4
+candidates = 3
+target_score = 92
+
+[models]
+# Commands receive the complete prompt on stdin and must print JSON on stdout.
+mutator_command = ["./scripts/mutator-wrapper"]
+evaluator_command = ["./scripts/evaluator-wrapper"]
+timeout_seconds = 180
+
+[context]
+writing_brief = "WRITING_BRIEF.md"
+dedup_decisions = "DEDUP_DECISIONS.md"
+rubric = "REVIEW_RUBRIC.md"
+
+[output]
+report_dir = ".manuscript-ci/reports"

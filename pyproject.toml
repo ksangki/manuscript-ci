@@ -1,0 +1,35 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "manuscript-ci"
+version = "0.1.0"
+description = "Conservative AI review for long-form manuscripts: mutate, evaluate, pairwise-verify, keep only wins."
+readme = "README.md"
+requires-python = ">=3.11"
+license = {text = "MIT"}
+authors = [
+  {name = "Kim Sangki"}
+]
+keywords = ["writing", "books", "editing", "llm", "ai", "manuscript", "review"]
+classifiers = [
+  "Development Status :: 3 - Alpha",
+  "License :: OSI Approved :: MIT License",
+  "Programming Language :: Python :: 3",
+  "Programming Language :: Python :: 3.11",
+  "Programming Language :: Python :: 3.12",
+  "Topic :: Text Processing",
+]
+
+[project.scripts]
+manuscript-ci = "manuscript_ci.cli:main"
+
+[tool.setuptools]
+package-dir = {"" = "src"}
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.setuptools.package-data]
+manuscript_ci = ["_templates/*"]
