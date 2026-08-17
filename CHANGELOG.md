@@ -9,6 +9,10 @@
   meta. Exits non-zero on findings so a release pipeline stops.
 - `SKILL.md` / `SKILL_KO.md`: a built-artifact pass, including the pandoc
   table-column behaviour that has no automated check yet.
+- `examples/github-actions/build-check.yml`: a workflow that gates published
+  artifacts, with manual dispatch so an existing book can be checked without
+  waiting for a change.
+- `examples/FINDINGS.md`: measured results from nine published books.
 
 ## 0.1.0 — 2026-08-15
 

@@ -180,6 +180,12 @@ Unlike `check`, this command exits non-zero when it finds something, so a releas
 pipeline stops on it. Every one of these defects shipped in a real book and was
 found by a reader, not by a build that reported success.
 
+A workflow that gates the artifact is in
+[`examples/github-actions/build-check.yml`](examples/github-actions/build-check.yml).
+The run that produced these checks — nine published books, eight clean EPUBs and
+one with all fifteen figures blank — is written up in
+[`examples/FINDINGS.md`](examples/FINDINGS.md).
+
 ## Using it as an AI agent skill
 
 `SKILL.md` contains a model-agnostic skill definition. Copy the repository or the skill file into your agent environment and ask:

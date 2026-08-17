@@ -1,0 +1,67 @@
+# Gate the artifact, not the manuscript.
+#
+# `manuscript-ci check` reads what you wrote. This one reads what your readers
+# will open. It belongs on the branch that publishes, because the defects it
+# finds do not exist in the manuscript at all — they are introduced by the
+# build, and every one of them lets the build report success.
+#
+# Real numbers from the run that motivated this file: nine published books,
+# every EPUB validating clean, and fifteen of fifteen chapter illustrations
+# rendering as blank boxes in one of them. Six of the books shipped web pages
+# that let mobile browsers resize text column by column.
+
+name: Build check
+
+on:
+  # Lets you check the currently published files without waiting for a change
+  # to them — useful right after adding this workflow to an existing book.
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - "docs/**.html"
+      - "**.epub"
+  pull_request:
+    paths:
+      - "docs/**.html"
+      - "**.epub"
+
+jobs:
+  artifacts:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install Manuscript CI
+        run: pip install manuscript-ci@git+https://github.com/ksangki/manuscript-ci
+
+      # Check the file you are about to publish. Rebuilding first would hide a
+      # defect that only exists in the committed artifact — which is the copy
+      # readers actually download.
+      - name: Check published artifacts
+        run: |
+          set -euo pipefail
+          # find, not a glob: docs/**/*.html silently skips docs/index.html
+          # unless globstar happens to be on, and a miss here looks identical
+          # to a pass.
+          mapfile -t targets < <(
+            find docs -name '*.html' 2>/dev/null
+            find . -maxdepth 1 -name '*.epub'
+          )
+          if [ ${#targets[@]} -eq 0 ]; then
+            echo "No built artifacts to check." && exit 0
+          fi
+          printf 'checking %s\n' "${targets[@]}"
+          manuscript-ci check-build "${targets[@]}"
+
+# check-build exits non-zero on any finding, so this job fails the pipeline.
+# That is deliberate: unlike prose findings, these are not opinions about
+# style. A blank figure is a blank figure.
+#
+# If a project genuinely cannot fix a finding yet, drop the specific file from
+# `targets` with a comment saying why — rather than making the whole job
+# advisory, which is how a red signal quietly becomes background noise.

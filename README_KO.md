@@ -213,6 +213,12 @@ manuscript-ci prompt FILE --kind mutate|score|pairwise
 멈추게 하기 위해서다. 위 다섯 가지는 모두 실제 책에서 배포된 뒤 **빌드가 아니라
 독자가** 찾아낸 것들이다.
 
+산출물을 막아주는 워크플로는
+[`examples/github-actions/build-check.yml`](examples/github-actions/build-check.yml)에
+있다. 이 검사들을 만들게 된 실측 결과 — 출간된 책 아홉 권, EPUB 여덟 권은 정상,
+한 권은 삽화 열다섯 개가 전부 빈칸 — 는
+[`examples/FINDINGS.md`](examples/FINDINGS.md)에 정리했다.
+
 ## AI 에이전트 스킬로 쓰기
 
 `SKILL.md`에는 모델에 종속되지 않는 리뷰 규칙이 들어 있다. 에이전트가 이 파일과 프로젝트 규칙을 먼저 읽게 한 뒤 다음처럼 요청할 수 있다.
