@@ -5,6 +5,7 @@ import json
 import sys
 from pathlib import Path
 
+from .artifacts import artifact_check
 from .config import init_project, load_config
 from .prompts import mutate_prompt, pairwise_prompt, score_prompt
 from .provider import ProviderError
@@ -32,6 +33,12 @@ def build_parser() -> argparse.ArgumentParser:
 
     check = sub.add_parser("check", help="run static checks without an LLM")
     check.add_argument("files", nargs="+")
+
+    build = sub.add_parser(
+        "check-build",
+        help="inspect built EPUB/HTML for defects the prose review cannot see",
+    )
+    build.add_argument("files", nargs="+")
 
     review = sub.add_parser("review", help="review one manuscript file")
     review.add_argument("file")
@@ -70,6 +77,17 @@ def main(argv: list[str] | None = None) -> int:
             for item in findings:
                 print(f"[{item.kind}] {item.path}: {item.detail}")
             return 0
+
+        if args.command == "check-build":
+            findings = artifact_check(_paths(args.files))
+            if not findings:
+                print("No build findings.")
+                return 0
+            for item in findings:
+                print(f"[{item.kind}] {item.path}: {item.detail}")
+            # Unlike `check`, every finding here is something a reader sees.
+            # Exit non-zero so a release pipeline stops on it.
+            return 1
 
         config = load_config(Path.cwd())
         reviewer = Reviewer(config)

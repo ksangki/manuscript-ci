@@ -148,12 +148,37 @@ Manuscript CI is intentionally conservative.
 ```text
 manuscript-ci init [DIR]
 manuscript-ci check FILE [FILE ...]
+manuscript-ci check-build FILE.epub|FILE.html [...]
 manuscript-ci review FILE [--apply] [--max-iterations N]
 manuscript-ci audit-book FILE [FILE ...]
 manuscript-ci prompt FILE --kind mutate|score|pairwise
 ```
 
 See [GUIDE_KO.md](GUIDE_KO.md) for a practical Korean guide.
+
+## Checking what the reader actually opens
+
+`check` and `review` read the manuscript. `check-build` reads what the manuscript
+was turned into, because a book can pass every prose gate and still arrive broken:
+
+- **`epub-responsive-img`** — an `<img>` in an EPUB still carrying `srcset`/`sizes`.
+  Builders rewrite `src` to the path inside the archive and leave `srcset` pointing
+  at the web tree. Reading systems prefer `srcset`, and HTML does not fall back to
+  `src` when the candidate is missing, so every figure renders as a blank box while
+  a perfectly valid `src` sits unused.
+- **`epub-image-missing`** — an image `src` that is not in the archive at all.
+- **`svg-stretched-corner`** — a rounded `<rect>` inside `preserveAspectRatio="none"`.
+  The radius is in user units, so each axis scales it differently and the rounded cap
+  renders as an ellipse. Bar charts are where this shows: the shortest bar becomes a
+  lozenge. The wider the reading column, the worse it looks.
+- **`html-no-text-size-adjust`** — a page that lets mobile browsers resize text per
+  block. In a table wide enough to scroll sideways, the long column inflates and the
+  short ones do not, so one table renders at two different font sizes.
+- **`html-no-viewport`** — a page with no viewport meta.
+
+Unlike `check`, this command exits non-zero when it finds something, so a release
+pipeline stops on it. Every one of these defects shipped in a real book and was
+found by a reader, not by a build that reported success.
 
 ## Using it as an AI agent skill
 

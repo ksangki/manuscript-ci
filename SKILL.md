@@ -96,6 +96,30 @@ Before large-scale editing, inspect the entire manuscript for:
 
 Report cross-book issues first. Then edit only the chapters that actually need changes.
 
+## Built-artifact pass
+
+A manuscript can pass every gate above and still reach the reader broken. Before
+calling a release done, open the built EPUB and the built HTML — not the build log,
+which reports success either way — and check:
+
+- **Images.** Does every `<img>` in the EPUB resolve inside the archive? Do any still
+  carry `srcset`/`sizes`? Builders rewrite `src` and leave `srcset` pointing at the
+  web tree; readers prefer `srcset` and never fall back to `src`, so a figure with a
+  valid `src` still renders blank.
+- **Vector graphics.** Any rounded `<rect>` inside `preserveAspectRatio="none"` will
+  have its corner radius stretched by the container's width. Bar charts distort as
+  the reading column gets wider.
+- **Mobile text.** Without `text-size-adjust`, mobile browsers inflate text by block
+  width, so a sideways-scrolling table renders its long column larger than its short
+  ones. Identical specified CSS, different rendered size — the stylesheet will not
+  explain it.
+- **Table columns.** Pandoc derives column widths from the separator row in the
+  markdown, not from cell contents. Under `table-layout:fixed` a two-word column and
+  a full-sentence column get the same share.
+
+`manuscript-ci check-build FILE.epub FILE.html` automates the first three. Run it on
+the artifact you are about to publish, not on a rebuild of it.
+
 ## Output style
 
 For review reports, provide:

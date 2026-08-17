@@ -1,5 +1,15 @@
 # Changelog
 
+## Unreleased
+
+- `check-build`: static checks on the built EPUB and HTML, for defects the prose
+  review cannot see — leftover `srcset`/`sizes` on EPUB images, image sources
+  missing from the archive, rounded rects distorted by
+  `preserveAspectRatio="none"`, and pages with no `text-size-adjust` or viewport
+  meta. Exits non-zero on findings so a release pipeline stops.
+- `SKILL.md` / `SKILL_KO.md`: a built-artifact pass, including the pandoc
+  table-column behaviour that has no automated check yet.
+
 ## 0.1.0 — 2026-08-15
 
 - Initial independent implementation.

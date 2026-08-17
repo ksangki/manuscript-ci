@@ -181,12 +181,37 @@ Manuscript CI는 의도적으로 보수적이다.
 ```text
 manuscript-ci init [DIR]
 manuscript-ci check FILE [FILE ...]
+manuscript-ci check-build FILE.epub|FILE.html [...]
 manuscript-ci review FILE [--apply] [--max-iterations N]
 manuscript-ci audit-book FILE [FILE ...]
 manuscript-ci prompt FILE --kind mutate|score|pairwise
 ```
 
 자세한 실전 사용법은 [`GUIDE_KO.md`](GUIDE_KO.md)를 참고하면 된다.
+
+## 독자가 실제로 여는 파일 점검하기
+
+`check`와 `review`는 원고를 읽는다. `check-build`는 그 원고가 무엇이 되었는지를
+읽는다. 문장 검사를 전부 통과하고 빌드도 성공했는데 독자 손에서는 깨져 있는
+경우가 있기 때문이다.
+
+- **`epub-responsive-img`** — EPUB 안의 `<img>`에 `srcset`·`sizes`가 남아 있다.
+  빌더는 `src`만 EPUB 안 경로로 고치고 `srcset`은 웹 경로 그대로 둔다. 리더는
+  `srcset`을 우선하고, HTML은 후보가 없어도 `src`로 되돌아가지 않는다. 그래서
+  멀쩡한 `src`를 놔둔 채 그림이 통째로 빈칸이 된다.
+- **`epub-image-missing`** — `src`가 가리키는 파일이 아예 EPUB 안에 없다.
+- **`svg-stretched-corner`** — `preserveAspectRatio="none"` 안의 둥근 `<rect>`.
+  반지름은 user 단위라 축마다 배율이 달라지고, 반원 캡이 긴 타원으로 늘어난다.
+  막대그래프에서 드러난다 — 가장 짧은 막대가 캡만 남는다. 본문 폭이 넓을수록
+  심해진다.
+- **`html-no-text-size-adjust`** — 모바일 브라우저가 블록마다 글자를 제 나름대로
+  키우도록 열어둔 페이지. 옆으로 스크롤되는 표에서 긴 열만 부풀어, 한 표 안에서
+  글자 크기가 두 가지로 보인다.
+- **`html-no-viewport`** — viewport meta가 없는 페이지.
+
+`check`와 달리 결함을 찾으면 종료 코드가 0이 아니다. 배포 파이프라인이 여기서
+멈추게 하기 위해서다. 위 다섯 가지는 모두 실제 책에서 배포된 뒤 **빌드가 아니라
+독자가** 찾아낸 것들이다.
 
 ## AI 에이전트 스킬로 쓰기
 
