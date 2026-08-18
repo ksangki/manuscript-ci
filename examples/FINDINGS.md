@@ -67,6 +67,61 @@ its short first column at 23% while the long column wrapped to three lines.
 There is no check for this, because whether it matters depends on the
 renderer's CSS. It is listed in `SKILL.md` as something to look at by eye.
 
+## The prose pass, over the same nine books
+
+`check-build` covers the artifact. This is what `check` — the manuscript pass —
+reported over 130 chapter files.
+
+| Finding | Count |
+|---|---|
+| `duplicate-across-files` | 4 |
+| `duplicate-within-file` | 2 |
+| `short-file` | 0 |
+| `strong-claim-word` | 419 |
+
+### The duplicates are decisions, not defects
+
+All four cross-file duplicates are a **quotation reused in two chapters** — an
+external quote in a prologue and again in the chapter that argues from it, or in
+an appendix that collects quotes. The two within-file duplicates are a code
+listing shown twice in a hands-on chapter, once in part and once in full.
+
+None is obviously wrong. Every one is a call only the author can make, which is
+why `check` exits zero and `check-build` does not.
+
+### Getting the file list wrong invents findings
+
+The first run reported **121 cross-file duplicates** in one book. Every one was
+an artifact of the invocation: `chapters/*.md` picked up both `01_chapter1.md`
+and `01_final.md`, superseded copies sitting beside the live ones. Two of the
+pairs were byte-identical.
+
+Re-running on the canonical set gave zero. The lesson generalizes — pass the
+files the book is actually built from, or the duplicate checks will report your
+directory layout back to you as an editorial problem.
+
+### `strong-claim-word` needs reading, not acting
+
+419 hits, and they are dominated by ordinary Korean quantifiers: 모두 (149),
+대부분 (87), 반드시 (73), 전부 (59).
+
+Of these, 6% sit inside quoted material, 5% are inside a hedge that means the
+*opposite* of an overclaim (`반드시 … 은 아니다`), and 2% are in code blocks,
+tables, or headings. Twelve body-prose hits were sampled and read: none was an
+unsupported factual claim. They were deliberate instructions ("반드시 담당자가
+검토하도록"), plain quantifiers ("모두가 배울 수 있는"), and narration ("전부
+짰다").
+
+The check is a lexical flag, and on Korean prose that word list fires on
+grammar rather than on overreach. Treat the output as a list to skim, not a
+list to fix — and consider narrowing the word list per book if you want it to
+carry a signal.
+
+### What was not run
+
+`audit-book` needs a configured mutator/evaluator, so it was not part of this
+sweep. The findings above are all from checks that run without a model.
+
 ## After the fixes
 
 All eleven artifacts pass. Browsers confirm the mobile rule resolves to `100%`
