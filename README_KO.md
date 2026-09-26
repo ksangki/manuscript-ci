@@ -189,11 +189,12 @@ export TYPESAFE_API_KEY=...   # 저장소에 넣지 마세요
 [models]
 pairwise_backend = "typesafe"   # 기본값: "command"
 typesafe_model = "jev-latest"
+typesafe_min_probability = 0.6   # 기본값. 승자 확률이 이보다 낮으면 무승부로 처리
 ```
 
 - 바뀐 문단과 앞뒤 한 문단씩만 브리프·중복 결정·루브릭과 함께 보냅니다. 장 전체를 보내면 Jev의 state 한도(32k 토큰)를 넘습니다.
 - 한 번 호출에 `winner` Choice(A/B/TIE)와 버전별 hard gate Noul을 함께 받습니다. hard gate는 이긴 쪽 기준으로 판단하므로, 진 쪽의 위반이 이긴 쪽을 막지 않습니다. 확률값은 리포트의 각 결정 `reason`에 기록됩니다.
-- 순서 편향 점검(A/B를 바꿔 두 번 비교)은 그대로 합니다.
+- 순서 편향 점검(A/B를 바꿔 두 번 비교)은 그대로 합니다. 확률이 비슷하게 갈리면 Jev가 두 번째로 놓인 쪽으로 기우는 경향이 있어, 승자 확률이 `typesafe_min_probability`보다 낮으면 무승부로 보고 원문을 유지합니다.
 - Jev는 영어에서 가장 정확합니다. 한국어도 되지만 정확도가 낮을 수 있으니, 몇 개 장에서 기존 명령 평가자와 결과를 비교한 뒤 쓰세요.
 - 원고 문단이 외부로 전송됩니다. 외부 API로 보내면 안 되는 원고에는 켜지 마세요.
 
