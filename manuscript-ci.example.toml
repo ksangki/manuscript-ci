@@ -8,6 +8,10 @@ target_score = 92
 mutator_command = ["./scripts/mutator-wrapper"]
 evaluator_command = ["./scripts/evaluator-wrapper"]
 timeout_seconds = 180
+# Optional: judge pairwise comparisons with a TypeSafe System One model instead of
+# evaluator_command. Needs `pip install 'manuscript-ci[typesafe]'` and TYPESAFE_API_KEY.
+# pairwise_backend = "typesafe"   # default: "command"
+# typesafe_model = "jev-latest"
 
 [context]
 writing_brief = "WRITING_BRIEF.md"

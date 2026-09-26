@@ -15,6 +15,8 @@ class Config:
     mutator_command: list[str]
     evaluator_command: list[str]
     timeout_seconds: int
+    pairwise_backend: str
+    typesafe_model: str
     writing_brief: Path
     dedup_decisions: Path
     rubric: Path
@@ -42,6 +44,8 @@ def load_config(start: Path | None = None) -> Config:
         mutator_command=[str(x) for x in models.get("mutator_command", [])],
         evaluator_command=[str(x) for x in models.get("evaluator_command", [])],
         timeout_seconds=int(models.get("timeout_seconds", 180)),
+        pairwise_backend=str(models.get("pairwise_backend", "command")),
+        typesafe_model=str(models.get("typesafe_model", "jev-latest")),
         writing_brief=root / str(context.get("writing_brief", "WRITING_BRIEF.md")),
         dedup_decisions=root / str(context.get("dedup_decisions", "DEDUP_DECISIONS.md")),
         rubric=root / str(context.get("rubric", "REVIEW_RUBRIC.md")),

@@ -176,6 +176,27 @@ Manuscript CI는 의도적으로 보수적이다.
 - **Hard gate.** 사실 날조, 저자 경험 창작, 출처보다 강한 주장, 저자 목소리 훼손은 숫자 점수가 올라도 거부할 수 있다.
 - **작은 수정 우선.** 한 장 전체 재작성보다 한 문장, 한 단락, 한 용어 수준의 surgical edit를 선호한다.
 
+## 선택: TypeSafe pairwise 판정
+
+pairwise 단계는 "두 버전 중 어느 쪽이 나은가, 이긴 쪽이 hard gate를 어기는가"만 묻습니다. 생성이 아니라 판정입니다. 이 단계만 [TypeSafe](https://docs.typesafe.ai/) System One 모델(Jev)에 맡기고, mutator와 scorer는 기존 명령 래퍼를 그대로 쓸 수 있습니다.
+
+```sh
+pip install 'manuscript-ci[typesafe]'
+export TYPESAFE_API_KEY=...   # 저장소에 넣지 마세요
+```
+
+```toml
+[models]
+pairwise_backend = "typesafe"   # 기본값: "command"
+typesafe_model = "jev-latest"
+```
+
+- 바뀐 문단과 앞뒤 한 문단씩만 브리프·중복 결정·루브릭과 함께 보냅니다. 장 전체를 보내면 Jev의 state 한도(32k 토큰)를 넘습니다.
+- 한 번 호출에 `winner` Choice(A/B/TIE)와 버전별 hard gate Noul을 함께 받습니다. hard gate는 이긴 쪽 기준으로 판단하므로, 진 쪽의 위반이 이긴 쪽을 막지 않습니다. 확률값은 리포트의 각 결정 `reason`에 기록됩니다.
+- 순서 편향 점검(A/B를 바꿔 두 번 비교)은 그대로 합니다.
+- Jev는 영어에서 가장 정확합니다. 한국어도 되지만 정확도가 낮을 수 있으니, 몇 개 장에서 기존 명령 평가자와 결과를 비교한 뒤 쓰세요.
+- 원고 문단이 외부로 전송됩니다. 외부 API로 보내면 안 되는 원고에는 켜지 마세요.
+
 ## 명령어
 
 ```text

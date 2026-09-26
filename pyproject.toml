@@ -22,6 +22,9 @@ classifiers = [
   "Topic :: Text Processing",
 ]
 
+[project.optional-dependencies]
+typesafe = ["typesafe-sdk>=0.7"]
+
 [project.scripts]
 manuscript-ci = "manuscript_ci.cli:main"
 
