@@ -75,7 +75,15 @@ def changed_excerpts(a: str, b: str, context: int = 1, max_chars: int = MAX_EXCE
 class TypeSafePairwise:
     """Pairwise judge backed by a TypeSafe System One model instead of a command wrapper."""
 
-    def __init__(self, brief: str, dedup: str, rubric: str, model: str, client: Any = None) -> None:
+    def __init__(
+        self,
+        brief: str,
+        dedup: str,
+        rubric: str,
+        model: str,
+        client: Any = None,
+        min_probability: float = 0.6,
+    ) -> None:
         self.rules = {
             key: value
             for key, value in {
@@ -86,6 +94,7 @@ class TypeSafePairwise:
             if value.strip()
         }
         self.model = model
+        self.min_probability = min_probability
         self._client = client
 
     @staticmethod
@@ -128,6 +137,9 @@ class TypeSafePairwise:
             "B": response.nouls["hard_gate_b"].noul,
         }
         winner = winner_answer.choice
+        # A near-even split is not a win: the original is the incumbent.
+        if winner != "TIE" and winner_answer.probabilities.get(winner, 0.0) < self.min_probability:
+            winner = "TIE"
         if winner in gate:
             hard_gate = gate[winner] >= HARD_GATE_THRESHOLD
         else:

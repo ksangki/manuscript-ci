@@ -23,7 +23,11 @@ class Reviewer:
         self.rubric = self._read_optional(config.rubric)
         if config.pairwise_backend == "typesafe":
             self.pairwise_judge: TypeSafePairwise | None = TypeSafePairwise(
-                self.brief, self.dedup, self.rubric, config.typesafe_model
+                self.brief,
+                self.dedup,
+                self.rubric,
+                config.typesafe_model,
+                min_probability=config.typesafe_min_probability,
             )
         elif config.pairwise_backend == "command":
             self.pairwise_judge = None

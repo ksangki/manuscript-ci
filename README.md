@@ -156,11 +156,12 @@ export TYPESAFE_API_KEY=...   # keep it out of the repo
 [models]
 pairwise_backend = "typesafe"   # default: "command"
 typesafe_model = "jev-latest"
+typesafe_min_probability = 0.6   # default; a winner below this counts as TIE
 ```
 
 - Only the changed paragraph and one neighbor on each side are sent, together with the brief, dedup decisions, and rubric. Whole chapters would exceed Jev's 32k-token state budget.
 - Each call returns a `winner` Choice (A/B/TIE) and one hard-gate Noul per version. The hard gate follows the winner, so a violation in the losing version does not block the winning one. Probabilities are written into each decision's `reason` in the report.
-- The order-bias check still runs both orders.
+- The order-bias check still runs both orders. On near-even splits Jev can lean toward whichever version is shown second, so a winner below `typesafe_min_probability` is treated as a TIE and the original stays.
 - Jev is strongest in English. Korean and other languages work but are less accurate, so compare against your command evaluator on a few chapters before relying on it.
 - The passages leave your machine. Do not enable it for manuscripts you are not allowed to send to an external API.
 

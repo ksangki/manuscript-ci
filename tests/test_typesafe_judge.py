@@ -127,3 +127,11 @@ def test_identical_texts_skip_the_api():
     result = _judge(client).pairwise(BEFORE, BEFORE)
     assert result.winner == "TIE"
     assert client.calls == []
+
+
+def test_near_even_split_is_a_tie():
+    pytest.importorskip("typesafe_sdk")
+    client = FakeClient("A", {"A": 0.53, "B": 0.41, "TIE": 0.06}, 0.1, 0.1)
+    result = _judge(client).pairwise(BEFORE, AFTER)
+    assert result.winner == "TIE"
+    assert "P(A)=0.53" in result.reason

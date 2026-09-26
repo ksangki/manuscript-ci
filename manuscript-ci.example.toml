@@ -12,6 +12,7 @@ timeout_seconds = 180
 # evaluator_command. Needs `pip install 'manuscript-ci[typesafe]'` and TYPESAFE_API_KEY.
 # pairwise_backend = "typesafe"   # default: "command"
 # typesafe_model = "jev-latest"
+# typesafe_min_probability = 0.6   # a winner below this counts as TIE
 
 [context]
 writing_brief = "WRITING_BRIEF.md"
