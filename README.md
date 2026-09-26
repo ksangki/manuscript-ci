@@ -143,6 +143,27 @@ Manuscript CI is intentionally conservative.
 - **Hard gates.** Fabricated facts, invented experience, source overclaiming, or author-voice damage can reject an edit even when the numeric score rises.
 - **Small changes.** The mutator is asked for surgical edits, not chapter rewrites.
 
+## Optional: TypeSafe pairwise judge
+
+The pairwise step only asks "which of these two versions is better, and does the winner break a hard gate?" — a judgment, not generation. You can hand that step to a [TypeSafe](https://docs.typesafe.ai/) System One model (Jev) while the mutator and scorer keep using your command wrappers.
+
+```sh
+pip install 'manuscript-ci[typesafe]'
+export TYPESAFE_API_KEY=...   # keep it out of the repo
+```
+
+```toml
+[models]
+pairwise_backend = "typesafe"   # default: "command"
+typesafe_model = "jev-latest"
+```
+
+- Only the changed paragraph and one neighbor on each side are sent, together with the brief, dedup decisions, and rubric. Whole chapters would exceed Jev's 32k-token state budget.
+- Each call returns a `winner` Choice (A/B/TIE) and one hard-gate Noul per version. The hard gate follows the winner, so a violation in the losing version does not block the winning one. Probabilities are written into each decision's `reason` in the report.
+- The order-bias check still runs both orders.
+- Jev is strongest in English. Korean and other languages work but are less accurate, so compare against your command evaluator on a few chapters before relying on it.
+- The passages leave your machine. Do not enable it for manuscripts you are not allowed to send to an external API.
+
 ## Commands
 
 ```text

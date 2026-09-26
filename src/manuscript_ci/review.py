@@ -10,6 +10,7 @@ from .models import CandidateDecision, IterationResult, Mutation, PairwiseResult
 from .prompts import audit_book_prompt, extract_chapter_prompt, mutate_prompt, pairwise_prompt, score_prompt
 from .provider import CommandProvider
 from .textops import apply_exact_once
+from .typesafe_judge import TypeSafePairwise
 
 
 class Reviewer:
@@ -20,6 +21,16 @@ class Reviewer:
         self.brief = self._read_optional(config.writing_brief)
         self.dedup = self._read_optional(config.dedup_decisions)
         self.rubric = self._read_optional(config.rubric)
+        if config.pairwise_backend == "typesafe":
+            self.pairwise_judge: TypeSafePairwise | None = TypeSafePairwise(
+                self.brief, self.dedup, self.rubric, config.typesafe_model
+            )
+        elif config.pairwise_backend == "command":
+            self.pairwise_judge = None
+        else:
+            raise ValueError(
+                f"unknown pairwise_backend {config.pairwise_backend!r}; use \"command\" or \"typesafe\""
+            )
 
     @staticmethod
     def _read_optional(path: Path) -> str:
@@ -36,6 +47,8 @@ class Reviewer:
         return [Mutation.from_dict(x) for x in data.get("candidates", []) if isinstance(x, dict)]
 
     def pairwise(self, a: str, b: str) -> PairwiseResult:
+        if self.pairwise_judge is not None:
+            return self.pairwise_judge.pairwise(a, b)
         data = self.evaluator.call(
             pairwise_prompt(a, b, self.brief, self.dedup, self.rubric)
         )
