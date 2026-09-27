@@ -123,7 +123,7 @@ def main(argv: list[str] | None = None) -> int:
             path = _paths([args.file])[0]
             text = path.read_text(encoding="utf-8")
             if args.kind == "score":
-                print(score_prompt(text, reviewer.brief, reviewer.dedup, reviewer.rubric))
+                print(score_prompt(text, reviewer.brief, reviewer.dedup, reviewer.rubric, reviewer.ledger))
             elif args.kind == "mutate":
                 print(
                     mutate_prompt(
@@ -133,13 +133,14 @@ def main(argv: list[str] | None = None) -> int:
                         reviewer.rubric,
                         config.candidates,
                         0,
+                        reviewer.ledger,
                     )
                 )
             else:
                 if not args.other:
                     raise ValueError("--other is required for pairwise mode")
                 other = _paths([args.other])[0].read_text(encoding="utf-8")
-                print(pairwise_prompt(text, other, reviewer.brief, reviewer.dedup, reviewer.rubric))
+                print(pairwise_prompt(text, other, reviewer.brief, reviewer.dedup, reviewer.rubric, reviewer.ledger))
             return 0
 
         return 2

@@ -132,6 +132,10 @@ Defines what “better” means. A useful rubric usually scores:
 - reader usefulness;
 - clarity without oversmoothing.
 
+### `FACT_LEDGER.md` (optional)
+
+Claims already checked against their sources, such as a fact-check log. Evaluator models do not know recent sources, so without a ledger they tend to flag verified 2026 citations as fabricated and trigger hard gates. The ledger is added to the mutator, scorer, and command-pairwise prompts; claims absent from it are still reviewed. It is not sent to the TypeSafe judge, whose hard gate only asks what an edit introduces.
+
 ## Safety defaults
 
 Manuscript CI is intentionally conservative.

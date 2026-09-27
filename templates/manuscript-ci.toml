@@ -18,6 +18,9 @@ timeout_seconds = 180
 writing_brief = "WRITING_BRIEF.md"
 dedup_decisions = "DEDUP_DECISIONS.md"
 rubric = "REVIEW_RUBRIC.md"
+# Optional: claims already verified against sources (e.g. a fact-check log).
+# Keeps evaluators from flagging recent, verified citations as fabricated.
+# fact_ledger = "FACT_LEDGER.md"
 
 [output]
 report_dir = ".manuscript-ci/reports"

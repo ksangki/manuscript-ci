@@ -21,6 +21,7 @@ class Config:
     writing_brief: Path
     dedup_decisions: Path
     rubric: Path
+    fact_ledger: Path
     report_dir: Path
 
 
@@ -51,6 +52,7 @@ def load_config(start: Path | None = None) -> Config:
         writing_brief=root / str(context.get("writing_brief", "WRITING_BRIEF.md")),
         dedup_decisions=root / str(context.get("dedup_decisions", "DEDUP_DECISIONS.md")),
         rubric=root / str(context.get("rubric", "REVIEW_RUBRIC.md")),
+        fact_ledger=root / str(context.get("fact_ledger", "FACT_LEDGER.md")),
         report_dir=root / str(output.get("report_dir", ".manuscript-ci/reports")),
     )
 
