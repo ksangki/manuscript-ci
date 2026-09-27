@@ -21,6 +21,7 @@ class Reviewer:
         self.brief = self._read_optional(config.writing_brief)
         self.dedup = self._read_optional(config.dedup_decisions)
         self.rubric = self._read_optional(config.rubric)
+        self.ledger = self._read_optional(config.fact_ledger)
         if config.pairwise_backend == "typesafe":
             self.pairwise_judge: TypeSafePairwise | None = TypeSafePairwise(
                 self.brief,
@@ -41,12 +42,12 @@ class Reviewer:
         return path.read_text(encoding="utf-8") if path.exists() else ""
 
     def score(self, text: str) -> ScoreResult:
-        data = self.evaluator.call(score_prompt(text, self.brief, self.dedup, self.rubric))
+        data = self.evaluator.call(score_prompt(text, self.brief, self.dedup, self.rubric, self.ledger))
         return ScoreResult.from_dict(data)
 
     def mutations(self, text: str, score: int, candidates: int) -> list[Mutation]:
         data = self.mutator.call(
-            mutate_prompt(text, self.brief, self.dedup, self.rubric, candidates, score)
+            mutate_prompt(text, self.brief, self.dedup, self.rubric, candidates, score, self.ledger)
         )
         return [Mutation.from_dict(x) for x in data.get("candidates", []) if isinstance(x, dict)]
 
@@ -54,7 +55,7 @@ class Reviewer:
         if self.pairwise_judge is not None:
             return self.pairwise_judge.pairwise(a, b)
         data = self.evaluator.call(
-            pairwise_prompt(a, b, self.brief, self.dedup, self.rubric)
+            pairwise_prompt(a, b, self.brief, self.dedup, self.rubric, self.ledger)
         )
         return PairwiseResult.from_dict(data)
 
@@ -182,6 +183,7 @@ class Reviewer:
                 self.brief,
                 self.dedup,
                 self.rubric,
+                self.ledger,
             )
         )
         self.config.report_dir.mkdir(parents=True, exist_ok=True)
